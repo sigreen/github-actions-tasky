@@ -29,13 +29,11 @@ jobs:
           tags: your-dockerhub-username/hello-kubernetes:latest
 
       - name: Set up Kubectl
-        uses: azure/setup-kubectl@v3
+        uses: azure/k8s-set-context@v1
         with:
-          version: 'v1.21.0'
+          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
 
-      - name: Deploy to Kubernetes
+      - name: Deploy
         run: |
           kubectl apply -f deployment.yaml
           kubectl apply -f service.yaml
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
