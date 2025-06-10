@@ -50,6 +50,6 @@ jobs:
       - name: Deploy
         run: |
           MONGO_CONNECTION_URL=${{ secrets.MONGO_CONNECTION_URL }}
-          sed -i "s|MONGO_CONNECTION_URL|${MONGO_CONNECTION_URL}/g" deployment.yaml
+          sed -i "s|MONGO_CONNECTION_URL|${MONGO_CONNECTION_URL}|g" deployment.yaml
           kubectl apply -f deployment.yaml
           kubectl apply -f service.yaml
