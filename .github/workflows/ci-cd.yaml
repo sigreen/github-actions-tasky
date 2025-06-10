@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: simongreen02/hello-kubernetes:latest
+          tags: simongreen02/orion:latest
 
       - name: Install Kubectl
         uses: azure/setup-kubectl@v3
@@ -49,5 +49,6 @@ jobs:
 
       - name: Deploy
         run: |
-          kubectl apply -f deployment.yaml
-          kubectl apply -f service.yaml
+          sed -i 's/value: "MONGO_CONNECTION_URL"/value: "${{ secrets.MONGO_CONNECTION_URL }}"/g' /etc/mongod.conf
+          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/service.yaml
