@@ -28,10 +28,24 @@ jobs:
           push: true
           tags: simongreen02/hello-kubernetes:latest
 
-      - name: Set up Kubectl
-        uses: azure/k8s-set-context@v1
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v3
         with:
-          kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+          version: 'v1.27.1' 
+        id: install
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Update KubeConfig
+        run: | 
+              mkdir -p $HOME/.kube
+              echo "$KUBE_CONFIG_DATA" | base64 -d > $HOME/.kube/config
+              aws eks update-kubeconfig --region us-east-1 --name ${{ secrets.KUBE_CLUSTER_NAME }}
 
       - name: Deploy
         run: |
