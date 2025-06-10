@@ -52,6 +52,6 @@ jobs:
 
       - name: Deploy
         run: |
-          sed -i "s/MONGO_CONNECTION_URL/${{ env.MONGO_CONNECTION_URL }}/g" k8s/deployment.yaml
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
+          sed -i s/MONGO_CONNECTION_URL/${{ env.MONGO_CONNECTION_URL }}/g deployment.yaml
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
